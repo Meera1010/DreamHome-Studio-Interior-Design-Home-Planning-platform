@@ -1,0 +1,177 @@
+/*
+DreamHome Studio — 2D Interactive Room Designer Stylesheet
+HTML5 Canvas workspace layout, floating toolbars, catalog drawer, property inspector.
+*/
+
+#designer-container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    background-color: #0b0f19;
+}
+
+/* Floating Left Toolbar */
+.designer-toolbar {
+    position: absolute;
+    top: 1rem;
+    left: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-md);
+    z-index: 50;
+}
+
+.tool-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--radius-sm);
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.tool-btn:hover {
+    background-color: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.tool-btn.active {
+    background-color: var(--accent-primary);
+    color: #ffffff;
+}
+
+/* Floating Top Control Bar (Zoom, Grid Snap, Undo/Redo, Export) */
+.designer-controlbar {
+    position: absolute;
+    top: 1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.4rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-full);
+    box-shadow: var(--shadow-md);
+    z-index: 50;
+}
+
+.divider-v {
+    width: 1px;
+    height: 20px;
+    background-color: var(--border-color);
+}
+
+/* Main Canvas Workspace */
+#canvas-viewport {
+    flex: 1;
+    height: 100%;
+    position: relative;
+    cursor: crosshair;
+    overflow: hidden;
+}
+
+#room-canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Right Property Inspector Sidebar */
+#property-inspector {
+    width: 320px;
+    height: 100%;
+    background-color: var(--bg-secondary);
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 40;
+}
+
+.inspector-header {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.inspector-body {
+    flex: 1;
+    padding: 1.25rem;
+    overflow-y: auto;
+}
+
+/* Catalog Browser Drawer (Bottom/Right) */
+#catalog-drawer {
+    width: 360px;
+    height: 100%;
+    background-color: var(--bg-secondary);
+    border-left: 1px solid var(--border-color);
+    display: flex;
+    flex-direction: column;
+    z-index: 40;
+}
+
+.catalog-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.catalog-grid {
+    flex: 1;
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+    overflow-y: auto;
+}
+
+.catalog-card {
+    background-color: var(--bg-primary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    cursor: grab;
+    transition: all var(--transition-fast);
+}
+
+.catalog-card:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-2px);
+}
+
+.catalog-card img {
+    width: 54px;
+    height: 54px;
+    object-fit: contain;
+    margin-bottom: 0.5rem;
+}
+
+.catalog-item-name {
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.catalog-item-price {
+    font-size: 0.75rem;
+    color: var(--accent-primary);
+    font-weight: 700;
+}

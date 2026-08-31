@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DreamHome Studio — Interior Design & Home Planning SaaS</title>
+    
+    <!-- Meta & SEO -->
+    <meta name="description" content="Professional 2D Interior Design, Floor Planning, Budget Management, and Client Collaboration SaaS Application.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏠</text></svg>">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="/static/css/main.css">
+    <link rel="stylesheet" href="/static/css/layout.css">
+    <link rel="stylesheet" href="/static/css/components.css">
+    <link rel="stylesheet" href="/static/css/designer.css">
+    <link rel="stylesheet" href="/static/css/dashboard.css">
+</head>
+<body>
+
+<div id="app-container">
+
+    <!-- Sidebar Navigation -->
+    <aside id="sidebar">
+        <div class="brand-header">
+            <div class="brand-logo">DH</div>
+            <div class="brand-name">DreamHome</div>
+        </div>
+
+        <nav class="nav-menu">
+            <div class="nav-group-title">Studio Core</div>
+            <div class="nav-item active" data-view="dashboard" id="nav-dashboard">
+                <span class="nav-icon">📊</span>
+                <span class="nav-text">Dashboard</span>
+            </div>
+            <div class="nav-item" data-view="designer" id="nav-designer">
+                <span class="nav-icon">🎨</span>
+                <span class="nav-text">2D Room Studio</span>
+            </div>
+            <div class="nav-item" data-view="projects" id="nav-projects">
+                <span class="nav-icon">📁</span>
+                <span class="nav-text">Projects</span>
+            </div>
+
+            <div class="nav-group-title">Management</div>
+            <div class="nav-item" data-view="budget" id="nav-budget">
+                <span class="nav-icon">💰</span>
+                <span class="nav-text">Budget & Costs</span>
+            </div>
+            <div class="nav-item" data-view="inventory" id="nav-inventory">
+                <span class="nav-icon">📦</span>
+                <span class="nav-text">Warehouse Stock</span>
+            </div>
+            <div class="nav-item" data-view="tasks" id="nav-tasks">
+                <span class="nav-icon">✅</span>
+                <span class="nav-text">Tasks & Timeline</span>
+            </div>
+
+            <div class="nav-group-title">System & Admin</div>
+            <div class="nav-item" data-view="admin" id="nav-admin">
+                <span class="nav-icon">⚙️</span>
+                <span class="nav-text">Admin Panel</span>
+            </div>
+        </nav>
+
+        <div class="user-footer">
+            <img src="/static/images/avatars/sarah.jpg" class="user-avatar" id="sidebar-user-avatar" alt="Avatar" onerror="this.src='/static/images/avatars/admin.jpg'">
+            <div class="user-info">
+                <div class="user-name" id="sidebar-user-name">Sarah Jenkins</div>
+                <div class="user-role" id="sidebar-user-role">Designer</div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div id="main-wrapper">
+        
+        <!-- Top App Bar Header -->
+        <header id="topbar">
+            <h2 id="view-title">Dashboard</h2>
+            <div class="flex-row items-center gap-3">
+                <button id="theme-toggle-btn" class="btn btn-outline btn-sm" title="Toggle Light/Dark Theme">🌓 Theme</button>
+                <button id="auth-logout-btn" class="btn btn-secondary btn-sm" onclick="DHAPIClient.logout().then(()=>location.reload())">Logout</button>
+            </div>
+        </header>
+
+        <!-- Main Dynamic View Container -->
+        <main id="main-content">
+
+            <!-- 1. DASHBOARD VIEW -->
+            <section id="view-dashboard" class="app-view dashboard-view">
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Total Projects</div>
+                            <div class="kpi-value" id="kpi-projects-count">0</div>
+                        </div>
+                        <div class="kpi-icon">📁</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Active Projects</div>
+                            <div class="kpi-value" id="kpi-active-count">0</div>
+                        </div>
+                        <div class="kpi-icon">⚡</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Total Budget Est.</div>
+                            <div class="kpi-value" id="kpi-budget-total">$0</div>
+                        </div>
+                        <div class="kpi-icon">💰</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Floorplans</div>
+                            <div class="kpi-value" id="kpi-floorplans-count">0</div>
+                        </div>
+                        <div class="kpi-icon">📐</div>
+                    </div>
+                </div>
+
+                <div class="dashboard-grid">
+                    <div class="glass-panel" style="padding:1.5rem;">
+                        <h3 style="margin-bottom:1rem;">Project Status Distribution</h3>
+                        <div id="chart-project-status" class="chart-container"></div>
+                    </div>
+
+                    <div class="glass-panel" style="padding:1.5rem;">
+                        <h3 style="margin-bottom:1rem;">Recent Security & Audit Logs</h3>
+                        <div id="recent-activity-list" style="display:flex;flex-direction:column;gap:0.5rem;"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. 2D ROOM DESIGNER STUDIO VIEW -->
+            <section id="view-designer" class="app-view hidden" style="width:100%;height:100%;">
+                <div id="designer-container">
+                    
+                    <!-- Floating Left Tools -->
+                    <div class="designer-toolbar">
+                        <button class="tool-btn active" data-tool="select" title="Select & Move Object (S)">🖐️</button>
+                        <button class="tool-btn" data-tool="wall" title="Draw Wall (W)">🧱</button>
+                        <button class="tool-btn" data-tool="door" title="Insert Door (D)">🚪</button>
+                        <button class="tool-btn" data-tool="window" title="Insert Window">🪟</button>
+                        <button class="tool-btn" data-tool="light" title="Add Point Light">💡</button>
+                    </div>
+
+                    <!-- Floating Top Control Bar -->
+                    <div class="designer-controlbar">
+                        <button class="btn btn-outline btn-sm" id="btn-zoom-out">-</button>
+                        <button class="btn btn-outline btn-sm" id="btn-zoom-reset">Reset Zoom</button>
+                        <button class="btn btn-outline btn-sm" id="btn-zoom-in">+</button>
+                        <div class="divider-v"></div>
+                        <button class="btn btn-outline btn-sm" id="btn-undo">↩ Undo</button>
+                        <button class="btn btn-outline btn-sm" id="btn-redo">↪ Redo</button>
+                        <div class="divider-v"></div>
+                        <button class="btn btn-secondary btn-sm" id="btn-export-png">Export PNG</button>
+                        <button class="btn btn-secondary btn-sm" id="btn-export-json">Export JSON</button>
+                        <button class="btn btn-primary btn-sm" id="btn-save-canvas">💾 Save Layout</button>
+                    </div>
+
+                    <!-- Main HTML5 Canvas Area -->
+                    <div id="canvas-viewport">
+                        <canvas id="room-canvas"></canvas>
+                    </div>
+
+                    <!-- Catalog Drawer (Middle/Right) -->
+                    <div id="catalog-drawer">
+                        <div class="catalog-header">
+                            <h4 style="font-weight:700;">Furniture Catalog</h4>
+                        </div>
+                        <div id="catalog-items-grid" class="catalog-grid"></div>
+                    </div>
+
+                    <!-- Property Inspector (Right) -->
+                    <div id="property-inspector">
+                        <div class="inspector-header">Property Inspector</div>
+                        <div id="inspector-content" class="inspector-body">
+                            <div style="text-align:center;padding:2rem 1rem;color:var(--text-muted);">
+                                No item selected
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- 3. PROJECTS VIEW -->
+            <section id="view-projects" class="app-view hidden" style="padding:2rem;">
+                <div class="flex-row justify-between items-center" style="margin-bottom:1.5rem;">
+                    <h3>All Interior Design Projects</h3>
+                </div>
+                <div id="projects-grid-container" class="projects-grid"></div>
+            </section>
+
+            <!-- 4. BUDGET VIEW -->
+            <section id="view-budget" class="app-view hidden" style="padding:2rem;">
+                <div class="kpi-grid" style="margin-bottom:1.5rem;">
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Total Estimated Cost</div>
+                            <div class="kpi-value" id="budget-stat-est">$0</div>
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div>
+                            <div class="kpi-title">Total Actual Spent</div>
+                            <div class="kpi-value" id="budget-stat-spent">$0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Item Name</th>
+                                <th>Category</th>
+                                <th>Unit Price</th>
+                                <th>Quantity</th>
+                                <th>Total Price</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="budget-items-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 5. INVENTORY VIEW -->
+            <section id="view-inventory" class="app-view hidden" style="padding:2rem;">
+                <h3 style="margin-bottom:1.5rem;">Warehouse Inventory & Furniture Stock</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>SKU</th>
+                                <th>Furniture Name</th>
+                                <th>Supplier</th>
+                                <th>Stock Qty</th>
+                                <th>Unit Cost</th>
+                                <th>Location Bin</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- 6. TASKS VIEW -->
+            <section id="view-tasks" class="app-view hidden" style="padding:2rem;">
+                <h3 style="margin-bottom:1.5rem;">Project Task Timeline</h3>
+                <div id="tasks-board-container" style="max-width:800px;"></div>
+            </section>
+
+            <!-- 7. ADMIN PANEL VIEW -->
+            <section id="view-admin" class="app-view hidden" style="padding:2rem;">
+                <h3 style="margin-bottom:1.5rem;">System User Management</h3>
+                <div class="table-container" style="margin-bottom:2rem;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Full Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-users-tbody"></tbody>
+                    </table>
+                </div>
+
+                <h3 style="margin-bottom:1.5rem;">System Audit Logs</h3>
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>User</th>
+                                <th>Action</th>
+                                <th>Entity</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-audit-tbody"></tbody>
+                    </table>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</div>
+
+<!-- Authentication Modal -->
+<div id="auth-modal" class="modal-overlay">
+    <div class="modal-card">
+        <div class="modal-header">
+            <h3>Login to DreamHome Studio</h3>
+        </div>
+        <div class="modal-body">
+            <form id="login-form">
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" id="login-email" class="form-input" value="sarah.jenkins@dreamhome.com" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Password</label>
+                    <input type="password" id="login-password" class="form-input" value="Designer123!Password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg" style="width:100%;margin-top:1rem;">Sign In</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- JavaScript Core & Engines -->
+<script src="/static/js/api_client.js"></script>
+<script src="/static/js/state.js"></script>
+<script src="/static/js/components/toast.js"></script>
+<script src="/static/js/components/modal.js"></script>
+<script src="/static/js/components/theme_toggle.js"></script>
+<script src="/static/js/components/navigation.js"></script>
+<script src="/static/js/components/chart_renderer.js"></script>
+<script src="/static/js/components/property_inspector.js"></script>
+<script src="/static/js/components/catalog_browser.js"></script>
+
+<!-- 2D Canvas Engine -->
+<script src="/static/js/engine/geometry.js"></script>
+<script src="/static/js/engine/wall_tool.js"></script>
+<script src="/static/js/engine/opening_tool.js"></script>
+<script src="/static/js/engine/object_manager.js"></script>
+<script src="/static/js/engine/transform_tool.js"></script>
+<script src="/static/js/engine/texture_manager.js"></script>
+<script src="/static/js/engine/lighting_engine.js"></script>
+<script src="/static/js/engine/history_manager.js"></script>
+<script src="/static/js/engine/exporter.js"></script>
+<script src="/static/js/engine/canvas_engine.js"></script>
+
+<!-- Views -->
+<script src="/static/js/views/auth_view.js"></script>
+<script src="/static/js/views/dashboard_view.js"></script>
+<script src="/static/js/views/designer_view.js"></script>
+<script src="/static/js/views/projects_view.js"></script>
+<script src="/static/js/views/budget_view.js"></script>
+<script src="/static/js/views/inventory_view.js"></script>
+<script src="/static/js/views/tasks_view.js"></script>
+<script src="/static/js/views/admin_view.js"></script>
+
+<!-- Main App Bootstrapper -->
+<script src="/static/js/app.js"></script>
+
+</body>
+</html>

@@ -12,6 +12,8 @@ ENV/
 # Database files
 database/*.db
 database/*.sqlite
+database/*.db-wal
+database/*.db-shm
 database/test_dreamhome.db
 
 # IDE & Editor files
@@ -21,7 +23,7 @@ database/test_dreamhome.db
 *.swo
 
 # Environment variables
-.env
+.env*
 
 # Test & Coverage
 .pytest_cache/

@@ -39,23 +39,24 @@ Built with a modern **Python 3.11 Flask REST API**, **SQLite relational database
 
 ---
 
-## Quick Start & Installation
+## Build Instructions
 
-### Prerequisites
-* Python 3.11+
-* Git
-
-### Installation Steps
+### Installation & Build Setup
 
 1. **Clone Repository**:
    ```bash
-   git clone https://github.com/your-username/dreamhome-studio.git
-   cd dreamhome-studio
+   git clone https://github.com/Meera1010/DreamHome-Studio-Interior-Design-Home-Planning-platform.git
+   cd DreamHome-Studio-Interior-Design-Home-Planning-platform
    ```
 
-2. **Install Dependencies**:
+2. **Install Dependencies & Build Environment**:
    ```bash
    pip install -r requirements.txt
+   ```
+
+3. **Build & Seed SQLite Database**:
+   ```bash
+   python database/seed_data.py
    ```
 
 3. **Initialize & Seed Database**:

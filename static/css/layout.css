@@ -1,7 +1,7 @@
-"""
+/*
 DreamHome Studio — Layout Stylesheet
 Sidebar navigation, appbar header, main content layout grid, and responsive rules.
-"""
+*/
 
 #app-container {
     display: flex;

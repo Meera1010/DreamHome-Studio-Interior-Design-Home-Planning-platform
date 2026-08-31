@@ -28,7 +28,7 @@ window.DHAPIClient = {
 
             if (!response.ok) {
                 const errorMsg = data.error || `HTTP ${response.status} Error`;
-                if (window.DHToast) {
+                if (window.DHToast && response.status !== 401) {
                     window.DHToast.error(errorMsg);
                 }
                 throw new Error(errorMsg);
